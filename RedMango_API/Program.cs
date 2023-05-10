@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using RedMango_API.Data;
 using RedMango_API.Models;
 using RedMango_API.Services;
+using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,8 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection"));
 });
-builder.Services.AddSingleton(u => new BlobServiceClient(
-    builder.Configuration.GetConnectionString("StorageAccount")));
+//builder.Services.AddSingleton(u => new BlobServiceClient(
+//    builder.Configuration.GetConnectionString("StorageAccount")));
 builder.Services.AddSingleton<IBlobService, BlobService>();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 

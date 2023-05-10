@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedMango_API.Data;
 
@@ -11,9 +12,10 @@ using RedMango_API.Data;
 namespace RedMangoAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230422183725_SeedMyItemsLevelUp")]
+    partial class SeedMyItemsLevelUp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -287,7 +289,7 @@ namespace RedMangoAPI.Migrations
                             Id = 1,
                             Category = "Appetizer",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/tMs7hwj/spring-roll.jpg",
+                            Image = "https://disk.yandex.ru/i/yRvgIClhcR9cSg",
                             Name = "Spring Roll",
                             Price = 7.9900000000000002,
                             SpecialTag = ""
@@ -297,7 +299,7 @@ namespace RedMangoAPI.Migrations
                             Id = 2,
                             Category = "Appetizer",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/94t5CtS/idli.jpg",
+                            Image = "https://disk.yandex.ru/i/1ih_J8RtL7SRaw",
                             Name = "Idli",
                             Price = 8.9900000000000002,
                             SpecialTag = ""
@@ -307,7 +309,7 @@ namespace RedMangoAPI.Migrations
                             Id = 3,
                             Category = "Appetizer",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/YbSwJLY/pani-puri.jpg",
+                            Image = "https://disk.yandex.ru/i/wqPQ_kqUUImPQg",
                             Name = "Panu Puri",
                             Price = 8.9900000000000002,
                             SpecialTag = "Best Seller"
@@ -317,7 +319,7 @@ namespace RedMangoAPI.Migrations
                             Id = 4,
                             Category = "Entrée",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/6wb2pDt/hakka-noodles.jpg",
+                            Image = "https://disk.yandex.ru/i/5l5-oUGLZQwVSA",
                             Name = "Hakka Noodles",
                             Price = 10.99,
                             SpecialTag = ""
@@ -327,7 +329,7 @@ namespace RedMangoAPI.Migrations
                             Id = 5,
                             Category = "Entrée",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/yNHL1KJ/malai-kofta.jpg",
+                            Image = "https://disk.yandex.ru/i/1Exwa_4FOFNA7w",
                             Name = "Malai Kofta",
                             Price = 12.99,
                             SpecialTag = "Top Rated"
@@ -337,7 +339,7 @@ namespace RedMangoAPI.Migrations
                             Id = 6,
                             Category = "Entrée",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/NymmH13/paneer-pizza.jpg",
+                            Image = "https://disk.yandex.ru/i/lK9qc3TXzOqmXA",
                             Name = "Paneer Pizza",
                             Price = 11.99,
                             SpecialTag = ""
@@ -347,7 +349,7 @@ namespace RedMangoAPI.Migrations
                             Id = 7,
                             Category = "Entrée",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/thNTTXV/paneer-tikka.jpg",
+                            Image = "https://disk.yandex.ru/i/d2-jTiC8gNuEgA",
                             Name = "Paneer Tikka",
                             Price = 13.99,
                             SpecialTag = "Chef's Special"
@@ -357,7 +359,7 @@ namespace RedMangoAPI.Migrations
                             Id = 8,
                             Category = "Dessert",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/4YwqV1T/carrot-love.jpg",
+                            Image = "https://disk.yandex.ru/i/PGhzf64PTeV-8w",
                             Name = "Carrot Love",
                             Price = 4.9900000000000002,
                             SpecialTag = ""
@@ -367,7 +369,7 @@ namespace RedMangoAPI.Migrations
                             Id = 9,
                             Category = "Dessert",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/yXT4j2w/rasmalai.jpg",
+                            Image = "https://disk.yandex.ru/i/6krphpsDziEEhw",
                             Name = "Rasmalai",
                             Price = 4.9900000000000002,
                             SpecialTag = "Chef's Special"
@@ -377,7 +379,7 @@ namespace RedMangoAPI.Migrations
                             Id = 10,
                             Category = "Dessert",
                             Description = "Fusc tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                            Image = "https://i.ibb.co/rp5pPkz/sweet-rolls.jpg",
+                            Image = "https://disk.yandex.ru/i/-dIRj51cSZhJDg",
                             Name = "Sweet Rolls",
                             Price = 3.9900000000000002,
                             SpecialTag = "Top Rated"

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedMango_API.Data;
@@ -20,20 +21,20 @@ namespace RedMango_API.Controllers
         private ApiResponse _response;
         public MenuItemController(ApplicationDbContext db, IBlobService blobService)
         {
-            _db= db;
-            _blobService= blobService;
-            _response= new ApiResponse();
+            _db = db;
+            _blobService = blobService;
+            _response = new ApiResponse();
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMenuItems()
         {
             _response.Result = _db.MenuItems;
-            _response.StatusCode=HttpStatusCode.OK;
+            _response.StatusCode = HttpStatusCode.OK;
             return Ok(_response);
         }
 
-        [HttpGet("{id:int}",Name = "GetMenuItem")]
+        [HttpGet("{id:int}", Name = "GetMenuItem")]
         public async Task<IActionResult> GetMenuItem(int id)
         {
             if (id == 0)
@@ -55,7 +56,8 @@ namespace RedMango_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse>> CreateMenuItem([FromForm]MenuItemCreateDTO menuItemCreateDTO)
+        [Authorize(Roles = SD.Role_Admin)]
+        public async Task<ActionResult<ApiResponse>> CreateMenuItem([FromForm] MenuItemCreateDTO menuItemCreateDTO)
         {
             try
             {
@@ -75,12 +77,12 @@ namespace RedMango_API.Controllers
                         Category = menuItemCreateDTO.Category,
                         SpecialTag = menuItemCreateDTO.SpecialTag,
                         Description = menuItemCreateDTO.Description,
-                        Image = await _blobService.UploadBlob(fileName,SD.SD_Storage_Container,menuItemCreateDTO.File)
+                        Image = await _blobService.UploadBlob(menuItemCreateDTO.File)
                     };
                     _db.MenuItems.Add(menuItemToCreate);
                     _db.SaveChanges();
                     _response.Result = menuItemToCreate;
-                    _response.StatusCode=HttpStatusCode.Created;
+                    _response.StatusCode = HttpStatusCode.Created;
                     return CreatedAtRoute("GetMenuItem", new { id = menuItemToCreate.Id }, _response);
 
                 }
@@ -127,11 +129,9 @@ namespace RedMango_API.Controllers
                     menuItemFromDb.SpecialTag = menuItemUpdateDTO.SpecialTag;
                     menuItemFromDb.Description = menuItemUpdateDTO.Description;
 
-                    if(menuItemUpdateDTO.File!=null && menuItemUpdateDTO.File.Length > 0)
+                    if (menuItemUpdateDTO.File != null && menuItemUpdateDTO.File.Length > 0)
                     {
-                        string fileName = $"{Guid.NewGuid()}{Path.GetExtension(menuItemUpdateDTO.File.FileName)}";
-                        await _blobService.DeleteBlob(menuItemFromDb.Image.Split('/').Last(), SD.SD_Storage_Container);
-                        menuItemFromDb.Image = await _blobService.UploadBlob(fileName, SD.SD_Storage_Container, menuItemUpdateDTO.File);
+                        menuItemFromDb.Image = await _blobService.UploadBlob(menuItemUpdateDTO.File);
                     }
 
                     _db.MenuItems.Update(menuItemFromDb);
@@ -161,28 +161,25 @@ namespace RedMango_API.Controllers
         {
             try
             {
-                    if (id ==0)
-                    {
+                if (id == 0)
+                {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     return BadRequest();
-                    }
+                }
 
-                    MenuItem menuItemFromDb = await _db.MenuItems.FindAsync(id);
-                    if (menuItemFromDb == null)
-                    {
+                MenuItem menuItemFromDb = await _db.MenuItems.FindAsync(id);
+                if (menuItemFromDb == null)
+                {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     return BadRequest();
-                    }
-                    await _blobService.DeleteBlob(menuItemFromDb.Image.Split('/').Last(), SD.SD_Storage_Container);
-                    int milliseconds = 2000;
-                    Thread.Sleep(milliseconds);
+                }
 
-                    _db.MenuItems.Remove(menuItemFromDb);
-                    _db.SaveChanges();
-                    _response.StatusCode = HttpStatusCode.NoContent;
-                    return Ok(_response);
+                _db.MenuItems.Remove(menuItemFromDb);
+                _db.SaveChanges();
+                _response.StatusCode = HttpStatusCode.NoContent;
+                return Ok(_response);
             }
             catch (Exception ex)
             {

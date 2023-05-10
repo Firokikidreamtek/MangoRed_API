@@ -1,46 +1,47 @@
-﻿using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
+﻿
+using Newtonsoft.Json;
+using RedMango_API.Models;
 
 namespace RedMango_API.Services
 {
     public class BlobService : IBlobService
     {
-        private readonly BlobServiceClient _blobClient;
+        private WebApplicationBuilder builder;
+        private string apiKey;
+        private string url;
+        private readonly string connectionToImgBB;
+        private HttpClient client;
+        private MultipartFormDataContent content;
 
-        public BlobService(BlobServiceClient blobClient)
+        public BlobService()
         {
-            _blobClient = blobClient;
-        }
-        public async Task<bool> DeleteBlob(string blobName, string containerName)
-        {
-            BlobContainerClient blobContainerClient = _blobClient.GetBlobContainerClient(containerName);
-            BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
-
-            return await blobClient.DeleteIfExistsAsync();
-
-        }
-
-        public async Task<string> GetBlob(string blobName, string containerName)
-        {
-            BlobContainerClient blobContainerClient = _blobClient.GetBlobContainerClient(containerName);
-            BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
-            return blobClient.Uri.AbsoluteUri;
+            builder = WebApplication.CreateBuilder();
+            url = builder.Configuration.GetConnectionString("ImgBB");
+            apiKey = builder.Configuration.GetValue<string>("ApiSettings:ApiKeyImgBB");
+            connectionToImgBB = url + $"?key={apiKey}";
+            client = new HttpClient();
+            content = new MultipartFormDataContent();
         }
 
-        public async Task<string> UploadBlob(string blobName, string containerName, IFormFile file)
+        public async Task<string> UploadBlob(IFormFile file)
         {
-            BlobContainerClient blobContainerClient = _blobClient.GetBlobContainerClient(containerName);
-            BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
-            var httpHeaders = new BlobHttpHeaders()
-            {
-                ContentType = file.ContentType
-            };
-            var result = await blobClient.UploadAsync(file.OpenReadStream(),httpHeaders);
-            if (result != null)
-            {
-                return await GetBlob(blobName, containerName);
-            }
-            return "";
+            var b64 = ConvertFileToByteArray(file);
+            content.Add(new StringContent(b64));
+            var request = new HttpRequestMessage(HttpMethod.Post, connectionToImgBB) { Content = content };
+            var rarResponse = await client.SendAsync(request);
+            var cleanResponse = rarResponse.Content.ReadAsStringAsync().Result;
+            var result = JsonConvert.DeserializeObject<Parent>(cleanResponse);
+            return result.Data.Url;
+        }
+
+        private string ConvertFileToByteArray(IFormFile file)
+        {
+            using var ms = new MemoryStream();
+            file.CopyTo(ms);
+            var fileBytes = ms.ToArray();
+            string s = Convert.ToBase64String(fileBytes);
+            return s;
+
         }
     }
 }

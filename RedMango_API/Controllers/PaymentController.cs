@@ -21,7 +21,7 @@ namespace RedMango_API.Controllers
             _db = db;
             _response = new();
         }
-
+        
         [HttpPost]
         public async Task<ActionResult<ApiResponse>> MakePayment(string userId)
         {
